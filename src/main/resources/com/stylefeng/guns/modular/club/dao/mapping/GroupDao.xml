@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.modular.club.dao.GroupDao">
+
+    <resultMap id="BaseResultMap" type="com.stylefeng.guns.modular.club.model.Group">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="master_name" property="masterName" jdbcType="VARCHAR"/>
+        <result column="master_identify_number" property="masterIdentifyNumber" jdbcType="VARCHAR"/>
+        <result column="admin_nick_name" property="adminNickName" jdbcType="VARCHAR"/>
+        <result column="master_phone" property="masterPhone" jdbcType="VARCHAR"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,master_name,master_identify_number,admin_nick_name,master_phone,create_date,state
+    </sql>
+
+    <select id="list" resultType="map" parameterType="java.util.Map">
+        select
+        * from club_group
+        <where>
+            <if test="masterPhone!=null and masterPhone!=''">
+                and master_phone=#{masterPhone}
+            </if>
+            <if test="name!=null and name!=''">
+                and name like CONCAT('%',#{name},'%')
+            </if>
+            <if test="masterName!=null and masterName!=''">
+                and master_name=#{masterName}
+            </if>
+            <if test="state!=null">
+                and state= #{state}
+            </if>
+        </where>
+        order by create_date desc
+    </select>
+</mapper>
