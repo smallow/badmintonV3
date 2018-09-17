@@ -1,12 +1,12 @@
-# Guns V2.5
+# Badminton V3
 
-新版Guns基于SpringBoot全面升级,完美整合springmvc + shiro + **MyBatis 通用 Mapper** + **分页插件 PageHelper** + beetl!
+新版Badminton基于SpringBoot全面升级,完美整合springmvc + shiro + **MyBatis 通用 Mapper** + **分页插件 PageHelper** + beetl!
 
 # 说明
 
 本项目 fork 自 [stylefeng](http://git.oschina.net/naan1993) 的 [Guns](http://git.oschina.net/naan1993/guns)！
 
-经过对 Guns 项目的修改，使得该项目成为一个通用 Mapper 和 分页插件使用的示例。
+经过对 Badminton 项目的修改，使得该项目成为一个通用 Mapper 和 分页插件使用的示例。
 
 项目引入了下面两个依赖：
 ```xml
