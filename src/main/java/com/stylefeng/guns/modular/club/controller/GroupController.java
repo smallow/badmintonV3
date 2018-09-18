@@ -5,6 +5,7 @@ import com.stylefeng.guns.common.controller.BaseController;
 import com.stylefeng.guns.common.exception.BizExceptionEnum;
 import com.stylefeng.guns.common.exception.BussinessException;
 import com.stylefeng.guns.common.page.PageReq;
+import com.stylefeng.guns.core.util.ToolUtil;
 import com.stylefeng.guns.modular.club.dao.GroupDao;
 import com.stylefeng.guns.modular.club.model.Group;
 import com.stylefeng.guns.modular.club.warpper.GroupWarpper;
@@ -14,7 +15,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.validation.Valid;
 import java.util.Date;
@@ -80,13 +83,15 @@ public class GroupController extends BaseController {
 ////        if (state != null)
 ////            criteria.andEqualTo("state", state);
 
+        if (state == null && masterPhone == null && groupName == null && masterPhone == null)
+            return null;
         PageReq params = defaultPage();
         PageHelper.offsetPage(params.getOffset(), params.getLimit());
-        Map<String,Object> param=new HashMap<>();
-        param.put("name",groupName);
-        param.put("masterPhone",masterPhone);
-        param.put("masterName",masterName);
-        param.put("state",state);
+        Map<String, Object> param = new HashMap<>();
+        param.put("name", groupName);
+        param.put("masterPhone", masterPhone);
+        param.put("masterName", masterName);
+        param.put("state", state);
         List<Map<String, Object>> groups = groupDao.list(param);
         return super.warpObject(new GroupWarpper(groups));
     }
@@ -138,5 +143,33 @@ public class GroupController extends BaseController {
     @ResponseBody
     public Object detail() {
         return null;
+    }
+
+
+    /**
+     * 查看俱乐部详情
+     */
+    @RequestMapping("/view/{groupId}")
+    @ResponseBody
+    public Group view(@PathVariable Integer groupId) {
+        if (ToolUtil.isEmpty(groupId)) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
+        return groupDao.selectByPrimaryKey(groupId);
+    }
+
+    /**
+     * 查看俱乐部详情
+     */
+    @RequestMapping("/findGroupByMasterPhone")
+    @ResponseBody
+    public List<Group> view(@RequestParam String masterPhone) {
+        if (ToolUtil.isEmpty(masterPhone)) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
+        Example example = new Example(Group.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("masterPhone", masterPhone);
+        return groupDao.selectByExample(example);
     }
 }

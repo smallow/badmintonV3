@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 /**
@@ -34,14 +35,14 @@ public class PayRecord {
 
 
     @Column(name = "money")
-    private Integer money;
+    private BigDecimal money;
 
 
     @Column(name = "pay_before_money")
-    private Integer payBeforeMoney;
+    private BigDecimal payBeforeMoney;
 
     @Column(name = "pay_after_money")
-    private Integer payAfterMoney;
+    private BigDecimal payAfterMoney;
 
     @Column(name = "user_id")
     private Integer userId;
