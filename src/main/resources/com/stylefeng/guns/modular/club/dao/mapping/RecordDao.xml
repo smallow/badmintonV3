@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.modular.club.dao.RecordDao">
+
+    <resultMap id="RecordResultMap" type="com.stylefeng.guns.modular.club.model.Record">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="group_id" property="groupId" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="book_date" property="bookDate" jdbcType="DATE"/>
+        <result column="cost" property="cost" jdbcType="DECIMAL"/>
+        <result column="pay_mode" property="payMode" jdbcType="INTEGER"/>
+        <result column="cost_mode" property="costMode" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="list" resultType="map" parameterType="java.util.Map">
+        SELECT
+        r.*,
+        g.name as groupName
+        FROM club_record r
+        LEFT JOIN club_group g ON g.id=r.group_id
+        <where>
+            <if test="groupName!=null and groupName!=''">
+                AND g.name like CONCAT('%',#{groupName},'%')
+            </if>
+            <if test="startTime!=null and startTime!=''">
+                AND r.create_time&gt;=CONCAT(#{startTime},' 00:00:00')
+            </if>
+            <if test="endTime!=null and endTime!=''">
+                AND r.create_time&lt;=CONCAT(#{endTime},' 23:59:59')
+            </if>
+        </where>
+        ORDER BY r.create_time DESC
+    </select>
+
+    <select id="bookList" resultType="map" parameterType="java.util.Map">
+        SELECT
+            b.book_date AS bookDate,
+            bc.court_id AS courtId,
+            bc.time_id AS timeIds
+        FROM club_book_court_record AS b
+        LEFT JOIN club_book_court_record_detail AS bc
+        ON b.id=bc.book_court_record_id
+        WHERE b.book_date=#{bookDate}
+    </select>
+</mapper>
