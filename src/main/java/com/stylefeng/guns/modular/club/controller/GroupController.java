@@ -83,8 +83,8 @@ public class GroupController extends BaseController {
 ////        if (state != null)
 ////            criteria.andEqualTo("state", state);
 
-        if (state == null && masterPhone == null && groupName == null && masterPhone == null)
-            return null;
+//        if (state == null && masterPhone == null && groupName == null && masterName == null)
+//            return null;
         PageReq params = defaultPage();
         PageHelper.offsetPage(params.getOffset(), params.getLimit());
         Map<String, Object> param = new HashMap<>();

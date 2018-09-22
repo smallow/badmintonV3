@@ -25,7 +25,7 @@ import static com.sun.deploy.perf.DeployPerfUtil.put;
 import static org.apache.coyote.http11.Constants.a;
 
 /**
- * 订场记录控制器
+ * 消费记录控制器
  *
  * @author fengshuonan
  * @Date 2018-09-18 09:40:18
@@ -43,7 +43,7 @@ public class RecordController extends BaseController {
     private CourtDao courtDao;
 
     /**
-     * 跳转到订场记录首页
+     * 跳转到消费记录首页
      */
     @RequestMapping("")
     public String index() {
@@ -51,7 +51,7 @@ public class RecordController extends BaseController {
     }
 
     /**
-     * 跳转到添加订场记录
+     * 跳转到添加消费记录
      */
     @RequestMapping("/record_add")
     public String recordAdd() {
@@ -59,7 +59,7 @@ public class RecordController extends BaseController {
     }
 
     /**
-     * 跳转到修改订场记录
+     * 跳转到修改消费记录
      */
     @RequestMapping("/record_update/{recordId}")
     public String recordUpdate(@PathVariable Integer recordId, Model model) {
@@ -67,7 +67,7 @@ public class RecordController extends BaseController {
     }
 
     /**
-     * 获取订场记录列表
+     * 获取消费记录列表
      */
     @RequestMapping(value = "/list")
     @ResponseBody
@@ -101,7 +101,7 @@ public class RecordController extends BaseController {
     }
 
     /**
-     * 新增订场记录
+     * 新增消费记录
      */
     @RequestMapping(value = "/add")
     @ResponseBody
@@ -110,7 +110,7 @@ public class RecordController extends BaseController {
     }
 
     /**
-     * 删除订场记录
+     * 删除消费记录
      */
     @RequestMapping(value = "/delete")
     @ResponseBody
@@ -120,7 +120,7 @@ public class RecordController extends BaseController {
 
 
     /**
-     * 修改订场记录
+     * 修改消费记录
      */
     @RequestMapping(value = "/update")
     @ResponseBody
@@ -129,7 +129,7 @@ public class RecordController extends BaseController {
     }
 
     /**
-     * 订场记录详情
+     * 消费记录详情
      */
     @RequestMapping(value = "/detail")
     @ResponseBody

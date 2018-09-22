@@ -24,9 +24,6 @@ public class Record {
     @Column(name = "create_time")
     private Timestamp createTime;
 
-    @Column(name = "book_date")
-    private Date bookDate;
-
     @Column(name = "cost")
     private BigDecimal cost;
 

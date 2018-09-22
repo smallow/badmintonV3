@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 订场记录Dao
+ * 消费记录Dao
  *
  * @author fengshuonan
  * @Date 2018-09-18 09:40:50
