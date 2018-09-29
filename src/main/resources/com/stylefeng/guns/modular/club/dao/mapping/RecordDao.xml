@@ -6,7 +6,6 @@
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="group_id" property="groupId" jdbcType="INTEGER"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="book_date" property="bookDate" jdbcType="DATE"/>
         <result column="cost" property="cost" jdbcType="DECIMAL"/>
         <result column="pay_mode" property="payMode" jdbcType="INTEGER"/>
         <result column="cost_mode" property="costMode" jdbcType="INTEGER"/>
@@ -41,5 +40,30 @@
         LEFT JOIN club_book_court_record_detail AS bc
         ON b.id=bc.book_court_record_id
         WHERE b.book_date=#{bookDate}
+        AND bc.court_id IS NOT NULL
+        AND bc.time_id != ''
+        <if test="courtId!=null and courtId>0">
+            AND bc.court_id = #{courtId}
+        </if>
+        <if test="timeId!=null and timeId!=''">
+            AND bc.time_id = #{timeId}
+        </if>
     </select>
+
+    <insert id="addBookCourtRecord" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.stylefeng.guns.modular.club.model.BookCourtRecord">
+        INSERT INTO
+          club_book_court_record(club_id,book_person_name,book_person_phone,cost,state,create_time,book_date)
+        VALUES
+        (#{clubId},#{bookPersonName},#{bookPersonPhone},#{cost},#{state},#{createTime},#{bookDate})
+    </insert>
+
+    <insert id="addBookCourtRecordDetails" parameterType="java.util.Map">
+        INSERT INTO
+          club_book_court_record_detail
+        VALUES
+        <foreach collection="bookedInfo" item="value" index="key" separator=",">
+            (uuid(),#{key},#{value},#{bookCourtRecordId})
+        </foreach>
+    </insert>
 </mapper>

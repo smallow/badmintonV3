@@ -1,5 +1,6 @@
 package com.stylefeng.guns.modular.club.dao;
 
+import com.stylefeng.guns.modular.club.model.BookCourtRecord;
 import com.stylefeng.guns.modular.club.model.Record;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -17,4 +18,8 @@ public interface RecordDao extends Mapper<Record> {
     List<Map<String, Object>> list(Map<String,Object> param);
 
     List<Map<String, Object>> bookList(Map<String,Object> param);
+
+    void addBookCourtRecord(BookCourtRecord bookRecord);
+
+    void addBookCourtRecordDetails(Map<String,Object> param);
 }

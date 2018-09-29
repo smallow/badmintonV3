@@ -1,17 +1,27 @@
 @layout("/common/_container.html"){
 <div class="ibox float-e-margins">
     <div class="ibox-content">
-        <div class="form-horizontal">
+        <div class="form-horizontal" id="recordInfoForm">
 
             <input type="hidden" id="id" value="">
 
             <div class="row">
                 <div class="col-sm-6 b-r">
-
+                    <#input id="groupId" name="俱乐部" underline="true"/>
+                    <#input id="cost" name="消费额" underline="true"/>
                 </div>
 
                 <div class="col-sm-6">
-
+                    <#select id="payMode" name="支付方式" underline="true">
+                        <option value="0">微信</option>
+                        <option value="1">支付宝</option>
+                        <option value="2">银行卡</option>
+                        <option value="3">现金</option>
+                    </#select>
+                    <#select id="costMode" name="消费方式" underline="true">
+                        <option value="0">预约消费</option>
+                        <option value="1">现场消费</option>
+                    </#select>
                 </div>
             </div>
 

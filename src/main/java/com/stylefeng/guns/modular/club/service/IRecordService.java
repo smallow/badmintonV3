@@ -1,5 +1,9 @@
 package com.stylefeng.guns.modular.club.service;
 
+import com.stylefeng.guns.modular.club.model.BookCourtRecord;
+
+import java.util.Map;
+
 /**
  * 订场记录Service
  *
@@ -7,5 +11,7 @@ package com.stylefeng.guns.modular.club.service;
  * @Date 2018-09-18 09:40:58
  */
 public interface IRecordService {
+
+    void saveBookInfo(BookCourtRecord bookCourtRecord, Map<String,Object> bookedMap);
 
 }

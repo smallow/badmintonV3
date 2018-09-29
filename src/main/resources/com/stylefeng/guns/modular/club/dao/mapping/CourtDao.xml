@@ -12,5 +12,6 @@
     <select id="list" resultType="map" parameterType="java.util.Map">
         SELECT * from club_court
         WHERE available=#{available}
+        ORDER BY code asc
     </select>
 </mapper>

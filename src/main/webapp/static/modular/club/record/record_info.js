@@ -2,7 +2,23 @@
  * 初始化订场记录详情对话框
  */
 var RecordInfoDlg = {
-    recordInfoData : {}
+    recordInfoData : {},
+    validateFields: {
+        groupId: {
+            validators: {
+                notEmpty: {
+                    message: '俱乐部不能为空'
+                }
+            }
+        },
+        cost: {
+            validators: {
+                notEmpty: {
+                    message: '消费额不能为空'
+                }
+            }
+        }
+    }
 };
 
 /**
@@ -44,8 +60,17 @@ RecordInfoDlg.close = function() {
  * 收集数据
  */
 RecordInfoDlg.collectData = function() {
-    this.set('id');
+    this.set('id').set('groupId').set('cost').set('payMode').set('costMode');
 }
+
+/**
+ * 验证数据是否为空
+ */
+RecordInfoDlg.validate = function () {
+    $('#recordInfoForm').data("bootstrapValidator").resetForm();
+    $('#recordInfoForm').bootstrapValidator('validate');
+    return $("#recordInfoForm").data('bootstrapValidator').isValid();
+};
 
 /**
  * 提交添加
@@ -54,6 +79,10 @@ RecordInfoDlg.addSubmit = function() {
 
     this.clearData();
     this.collectData();
+
+    if (!this.validate()) {
+        return;
+    }
 
     //提交信息
     var ajax = new $ax(Feng.ctxPath + "/record/add", function(data){
@@ -88,5 +117,5 @@ RecordInfoDlg.editSubmit = function() {
 }
 
 $(function() {
-
+    Feng.initValidator("recordInfoForm", RecordInfoDlg.validateFields);
 });
