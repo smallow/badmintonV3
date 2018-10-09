@@ -24,19 +24,12 @@ public class RecordServiceImpl implements IRecordService {
 
     @Transactional
     public void saveBookInfo(BookCourtRecord bcr,Map<String,Object> bookedMap){
-        BookCourtRecord bookCourtRecord = new BookCourtRecord();
-        bookCourtRecord.setClubId(bcr.getClubId());
-        bookCourtRecord.setBookPersonName(bcr.getBookPersonName());
-        bookCourtRecord.setBookPersonPhone(bcr.getBookPersonPhone());
-        bookCourtRecord.setCreateTime(new Timestamp(System.currentTimeMillis()));
-        bookCourtRecord.setCost(bcr.getCost());
-        bookCourtRecord.setState(bcr.getState());
-        bookCourtRecord.setBookDate(bcr.getBookDate());
-        recordDao.addBookCourtRecord(bookCourtRecord);
+        bcr.setCreateTime(new Timestamp(System.currentTimeMillis()));
+        recordDao.addBookCourtRecord(bcr);
 
         Map<String,Object> param=new HashMap<>();
         param.put("bookedInfo",bookedMap);
-        param.put("bookCourtRecordId",bookCourtRecord.getId());
+        param.put("bookCourtRecordId",bcr.getId());
         recordDao.addBookCourtRecordDetails(param);
     }
 

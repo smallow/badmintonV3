@@ -54,6 +54,9 @@ public class RecordController extends BaseController {
     public static final String CODE_FAIL = "2"; //代码 2-失败
     public static final String MAPKEY_RETURN_CODE = "code";//返回结果的mapKey CODE_SUCCEED CODE_FAIL
     public static final String MAPKEY_RETURN_MSG = "msg";//返回结果的mapKey
+    public static final Integer AVAILABLE_COURT = 1;//场地-可用
+    public static final Integer BOOKMODE_ONLINE = 0;//预定方式-网上
+    public static final Integer STATE_BOOKED = 0;//预定记录状态-已预定（默认状态）
 
     /**
      * 跳转到消费记录首页
@@ -84,13 +87,14 @@ public class RecordController extends BaseController {
      */
     @RequestMapping(value = "/list")
     @ResponseBody
-    public Object list(String groupName,String startTime,String endTime,String status) {
+    public Object list(String groupName,String startTime,String endTime,String state) {
         PageReq params = defaultPage();
         PageHelper.offsetPage(params.getOffset(), params.getLimit());
         Map<String,Object> param=new HashMap<>();
         param.put("groupName",groupName);
         param.put("startTime",startTime);
         param.put("endTime",endTime);
+        param.put("state",state);
         List<Map<String, Object>> records = recordDao.list(param);
         return super.warpObject(new RecordWarpper(records));
     }
@@ -110,7 +114,7 @@ public class RecordController extends BaseController {
         try {
             reMap.put("bookCourtInfo",recordDao.bookList(param));//已预定的场地信息
             reMap.put("timePriceInfo",priceDao.list());//所有时间的价格信息
-            reMap.put("courtInfo",courtDao.list(new HashMap<String,Object>(){{put("available",1);}}));//所有可用的场地信息
+            reMap.put("courtInfo",courtDao.list(new HashMap<String,Object>(){{put("available",AVAILABLE_COURT);}}));//所有可用的场地信息
             code = CODE_SUCCEED;
         } catch (Exception e) {
             e.printStackTrace();
@@ -129,7 +133,7 @@ public class RecordController extends BaseController {
     @RequestMapping(value = "/api/saveBookInfo",produces="text/html;charset=UTF-8")
     @ResponseBody
     public Object saveBookInfo(String bookInfo){
-//        String bookInfo = "{\"bookDate\":\"2018-09-24\",\"cost\":\"240\",\"bookList\":[{\"courtId\":3,\"timePriceId\":\"1\"},{\"courtId\":3,\"timePriceId\":\"2\"},{\"courtId\":12,\"timePriceId\":\"3\"},{\"courtId\":12,\"timePriceId\":\"5\"}]}";
+//        String bookInfo = "{\"bookDate\":\"2018-09-26\",\"cost\":\"240\",\"bookList\":[{\"courtId\":3,\"timePriceId\":\"1\"},{\"courtId\":3,\"timePriceId\":\"2\"},{\"courtId\":12,\"timePriceId\":\"3\"},{\"courtId\":12,\"timePriceId\":\"5\"}]}";
         Map<String,Object> reMap = new HashMap();
         String code;
         try {
@@ -156,12 +160,13 @@ public class RecordController extends BaseController {
                 bookedMap.put(courtId,bookedMap.get(courtId)==null ? timePriceId : bookedMap.get(courtId)+","+timePriceId);
             }
             BookCourtRecord bcr = new BookCourtRecord();
-            bcr.setBookDate((new SimpleDateFormat("yyyy-MM-dd")).parse(bookDate));
-            bcr.setClubId(11);
+            bcr.setGroupId(11);
             bcr.setBookPersonName("测试24");
             bcr.setBookPersonPhone("15812341124");
+            bcr.setBookDate((new SimpleDateFormat("yyyy-MM-dd")).parse(bookDate));
+            bcr.setBookMode(BOOKMODE_ONLINE);
             bcr.setCost(new BigDecimal(cost));
-            bcr.setState(0);
+            bcr.setState(STATE_BOOKED);
             recordService.saveBookInfo(bcr,bookedMap);
             code = CODE_SUCCEED;
         }catch (Exception e){

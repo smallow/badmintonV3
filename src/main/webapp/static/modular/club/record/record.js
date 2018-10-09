@@ -16,10 +16,14 @@ Record.initColumn = function () {
         {field: 'selectItem', radio: true},
         {title: 'id', field: 'id', visible: false, align: 'center', valign: 'middle'},
         {title: '俱乐部名称', field: 'groupName', align: 'center', valign: 'middle', sortable: true},
-        {title: '创建时间', field: 'create_time', align: 'center', valign: 'middle', sortable: true},
-        {title: '消费额', field: 'cost', align: 'center', valign: 'middle', sortable: true},
+        {title: '预定者名称', field: 'book_person_name', align: 'center', valign: 'middle', sortable: true},
+        {title: '预定者手机号码', field: 'book_person_phone', align: 'center', valign: 'middle', sortable: true},
+        {title: '预定日期', field: 'book_date', align: 'center', valign: 'middle', sortable: true},
+        {title: '预定方式', field: 'book_mode', align: 'center', valign: 'middle', sortable: true},
+        {title: '状态', field: 'state', align: 'center', valign: 'middle', sortable: true},
+        {title: '消费金额', field: 'cost', align: 'center', valign: 'middle', sortable: true},
         {title: '支付方式', field: 'pay_mode', align: 'center', valign: 'middle', sortable: true},
-        {title: '消费方式', field: 'cost_mode', align: 'center', valign: 'middle', sortable: true}
+        {title: '创建时间', field: 'create_time', align: 'center', valign: 'middle', sortable: true}
     ];
 };
 
@@ -93,7 +97,7 @@ Record.search = function () {
     queryData['groupName'] = $("#groupName").val();
     queryData['startTime'] = $("#startTime").val();
     queryData['endTime'] = $("#endTime").val();
-    queryData['status'] = $("#status").val();
+    queryData['state'] = $("#state").val();
     Record.table.refresh({query: queryData});
 };
 

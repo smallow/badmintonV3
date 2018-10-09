@@ -2,20 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.stylefeng.guns.modular.club.dao.RecordDao">
 
-    <resultMap id="RecordResultMap" type="com.stylefeng.guns.modular.club.model.Record">
-        <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="group_id" property="groupId" jdbcType="INTEGER"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="cost" property="cost" jdbcType="DECIMAL"/>
-        <result column="pay_mode" property="payMode" jdbcType="INTEGER"/>
-        <result column="cost_mode" property="costMode" jdbcType="INTEGER"/>
-    </resultMap>
-
     <select id="list" resultType="map" parameterType="java.util.Map">
         SELECT
         r.*,
         g.name as groupName
-        FROM club_record r
+        FROM club_book_court_record r
         LEFT JOIN club_group g ON g.id=r.group_id
         <where>
             <if test="groupName!=null and groupName!=''">
@@ -26,6 +17,9 @@
             </if>
             <if test="endTime!=null and endTime!=''">
                 AND r.create_time&lt;=CONCAT(#{endTime},' 23:59:59')
+            </if>
+            <if test="state!=null and state>-1">
+                AND r.state=#{state}
             </if>
         </where>
         ORDER BY r.create_time DESC
@@ -53,9 +47,9 @@
     <insert id="addBookCourtRecord" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.stylefeng.guns.modular.club.model.BookCourtRecord">
         INSERT INTO
-          club_book_court_record(club_id,book_person_name,book_person_phone,cost,state,create_time,book_date)
+          club_book_court_record(group_id,book_person_name,book_person_phone,book_date,book_mode,state,cost,create_time)
         VALUES
-        (#{clubId},#{bookPersonName},#{bookPersonPhone},#{cost},#{state},#{createTime},#{bookDate})
+          (#{groupId},#{bookPersonName},#{bookPersonPhone},#{bookDate},#{bookMode},#{state},#{cost},#{createTime})
     </insert>
 
     <insert id="addBookCourtRecordDetails" parameterType="java.util.Map">

@@ -2,7 +2,8 @@ package com.stylefeng.guns.modular.club.warpper;
 
 import com.stylefeng.guns.common.warpper.BaseControllerWarpper;
 import com.stylefeng.guns.core.util.EnumUtil;
-import com.stylefeng.guns.modular.club.enums.CostModeEnum;
+import com.stylefeng.guns.modular.club.enums.BookModeEnum;
+import com.stylefeng.guns.modular.club.enums.BookRecordStateEnum;
 import com.stylefeng.guns.modular.club.enums.RecordPayModeEnum;
 
 import java.util.List;
@@ -18,7 +19,8 @@ public class RecordWarpper extends BaseControllerWarpper {
 
     @Override
     protected void warpTheMap(Map<String, Object> map) {
+        map.put("book_mode", EnumUtil.getByCode(Integer.parseInt(String.valueOf(map.get("book_mode"))), BookModeEnum.class).getName());
+        map.put("state", EnumUtil.getByCode(Integer.parseInt(String.valueOf(map.get("state"))), BookRecordStateEnum.class).getName());
         map.put("pay_mode", EnumUtil.getByCode(Integer.parseInt(String.valueOf(map.get("pay_mode"))), RecordPayModeEnum.class).getName());
-        map.put("cost_mode", EnumUtil.getByCode(Integer.parseInt(String.valueOf(map.get("cost_mode"))), CostModeEnum.class).getName());
     }
 }
