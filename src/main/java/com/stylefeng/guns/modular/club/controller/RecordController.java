@@ -69,11 +69,18 @@ public class RecordController extends BaseController {
     /**
      * 跳转到添加消费记录
      */
-    @RequestMapping("/record_add")
+   /* @RequestMapping("/record_add")
     public String recordAdd() {
         return PREFIX + "record_add.html";
-    }
+    }*/
 
+    /**
+     * 新增订单页面--iframe
+     */
+    @RequestMapping("/record_add")
+    public String orderadd() {
+        return PREFIX + "order_add.html";
+    }
     /**
      * 跳转到修改消费记录
      */
