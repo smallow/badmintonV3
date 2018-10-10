@@ -14,10 +14,13 @@
         <result column="master_phone" property="masterPhone" jdbcType="VARCHAR"/>
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
         <result column="state" property="state" jdbcType="INTEGER"/>
+        <result column="pwd" property="pwd" jdbcType="VARCHAR"/>
+        <result column="salt" property="salt" jdbcType="VARCHAR"/>
+        <result column="money" property="money" jdbcType="DECIMAL"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,name,master_name,master_identify_number,admin_nick_name,master_phone,create_date,state
+        id,name,master_name,master_identify_number,admin_nick_name,master_phone,create_date,state,pwd,salt,money
     </sql>
 
     <select id="list" resultType="map" parameterType="java.util.Map">

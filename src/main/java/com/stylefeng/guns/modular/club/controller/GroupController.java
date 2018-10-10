@@ -5,8 +5,10 @@ import com.stylefeng.guns.common.controller.BaseController;
 import com.stylefeng.guns.common.exception.BizExceptionEnum;
 import com.stylefeng.guns.common.exception.BussinessException;
 import com.stylefeng.guns.common.page.PageReq;
+import com.stylefeng.guns.core.shiro.ShiroKit;
 import com.stylefeng.guns.core.util.ToolUtil;
 import com.stylefeng.guns.modular.club.dao.GroupDao;
+import com.stylefeng.guns.modular.club.enums.GroupStateEnum;
 import com.stylefeng.guns.modular.club.model.Group;
 import com.stylefeng.guns.modular.club.warpper.GroupWarpper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,8 +113,11 @@ public class GroupController extends BaseController {
 //        if (theUser != null) {
 //            throw new BussinessException(BizExceptionEnum.USER_ALREADY_REG);
 //        }
+
         group.setCreateDate(new Date());
-        group.setState(0);
+        group.setState(GroupStateEnum.NORMAL.getCode());
+        group.setSalt(ShiroKit.getRandomSalt(5));
+        group.setPwd(ShiroKit.md5(group.getPwd(), group.getSalt()));
         groupDao.insert(group);
         return SUCCESS_TIP;
     }

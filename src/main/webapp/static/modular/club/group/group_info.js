@@ -31,7 +31,15 @@ var GroupInfoDlg = {
                     message: '负责人身份证号不能为空'
                 }
             }
+        },
+        pwd: {
+            validators: {
+                notEmpty: {
+                    message: '俱乐部账户密码不能为空'
+                }
+            }
         }
+
     }
 };
 
@@ -74,7 +82,7 @@ GroupInfoDlg.close = function () {
  * 收集数据
  */
 GroupInfoDlg.collectData = function () {
-    this.set('id').set("name", $("#groupName").val()).set("masterName").set("masterPhone").set("masterIdentifyNumber", $("#masterIdentifyNumber").val());
+    this.set('id').set("name", $("#groupName").val()).set("masterName").set("masterPhone").set("masterIdentifyNumber", $("#masterIdentifyNumber").val()).set("pwd").set("adminNickName");
 };
 
 /**
