@@ -7,6 +7,7 @@ import lombok.Data;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.util.Date;
 @Data
 @Table(name = "club_group")
@@ -52,4 +53,19 @@ public class Group {
      */
     //@JsonSerialize(using = GroupStateSerializer.class)
     private Integer state;
+
+    /**
+     * 俱乐部账户登录密码
+     */
+    @Column(name = "pwd")
+    private String pwd;
+
+    @Column(name = "salt")
+    private String salt;
+
+    /**
+     * 俱乐部账户余额
+     */
+    @Column(name = "money")
+    private BigDecimal money;
 }

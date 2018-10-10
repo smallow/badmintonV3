@@ -37,13 +37,6 @@ public class PayRecord {
     @Column(name = "money")
     private BigDecimal money;
 
-
-    @Column(name = "pay_before_money")
-    private BigDecimal payBeforeMoney;
-
-    @Column(name = "pay_after_money")
-    private BigDecimal payAfterMoney;
-
     @Column(name = "user_id")
     private Integer userId;
 
