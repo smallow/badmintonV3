@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public enum BookRecordStateEnum implements CodeEnum {
-    BOOKED(0, "已预定"), USED(1, "已消费"), MISSED(2, "未到达");
+    BOOKED(0, "已预订"), USED(1, "已消费"), MISSED(2, "未到达");
 
     private Integer code;
     private String name;

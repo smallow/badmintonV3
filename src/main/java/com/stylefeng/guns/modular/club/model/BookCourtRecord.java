@@ -1,6 +1,7 @@
 package com.stylefeng.guns.modular.club.model;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -23,16 +24,17 @@ public class BookCourtRecord {
     private Integer groupId;//俱乐部id
 
     @Column(name = "book_person_name")
-    private String bookPersonName;//预定者名称
+    private String bookPersonName;//预订者名称
 
     @Column(name = "book_person_phone")
-    private String bookPersonPhone;//预定者手机号码
+    private String bookPersonPhone;//预订者手机号码
 
     @Column(name = "book_date")
-    private Date bookDate;//预定日期
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date bookDate;//预订日期
 
     @Column(name = "book_mode")
-    private Integer bookMode;//预定方式 0-网上 1-现场 2-次卡
+    private Integer bookMode;//预订方式 0-网上 1-现场 2-次卡
 
     @Column(name = "state")
     private Integer state;//状态 0-预约 1-已到 2-未到

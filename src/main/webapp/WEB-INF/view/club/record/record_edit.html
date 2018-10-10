@@ -1,17 +1,40 @@
 @layout("/common/_container.html"){
 <div class="ibox float-e-margins">
     <div class="ibox-content">
-        <div class="form-horizontal">
+        <div class="form-horizontal" id="recordInfoForm">
 
             <input type="hidden" id="id" value="${record.id}">
+            <input type="hidden" id="bookModeValue" value="${record.bookMode}">
+            <input type="hidden" id="stateValue" value="${record.state}">
+            <input type="hidden" id="payModeValue" value="${record.payMode}">
 
             <div class="row">
                 <div class="col-sm-6 b-r">
-
+                    <#input id="bookPersonName" name="预订者名称" underline="true" value="${record.bookPersonName}"/>
+                    <#input id="bookPersonPhone" name="预订者手机号码" underline="true" value="${record.bookPersonPhone}"/>
+                    <#input id="bookDate" name="预订日期" underline="true" type="date"
+                            value="${record.bookDate}"
+                            clickFun="laydate({istime: false, format: 'YYYY-MM-DD'})" />
+                    <#select id="bookMode" name="预订方式">
+                        <option value="0">网上预订</option>
+                        <option value="1">现场预订</option>
+                        <option value="2">次卡预订</option>
+                    </#select>
                 </div>
 
                 <div class="col-sm-6">
-
+                    <#select id="state" name="状态" underline="true">
+                        <option value="0">已预订</option>
+                        <option value="1">已消费</option>
+                        <option value="2">未到达</option>
+                    </#select>
+                    <#input id="cost" name="消费金额" underline="true" value="${record.cost}"/>
+                    <#select id="payMode" name="支付方式">
+                        <option value="0">微信</option>
+                        <option value="1">支付宝</option>
+                        <option value="2">银行卡</option>
+                        <option value="3">现金</option>
+                    </#select>
                 </div>
             </div>
 

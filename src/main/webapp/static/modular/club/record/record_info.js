@@ -4,17 +4,31 @@
 var RecordInfoDlg = {
     recordInfoData : {},
     validateFields: {
-        groupId: {
+        bookPersonName: {
             validators: {
                 notEmpty: {
-                    message: '俱乐部不能为空'
+                    message: '预订者名称不能为空'
+                }
+            }
+        },
+        bookPersonPhone: {
+            validators: {
+                notEmpty: {
+                    message: '预订者手机号码不能为空'
                 }
             }
         },
         cost: {
             validators: {
                 notEmpty: {
-                    message: '消费额不能为空'
+                    message: '消费金额不能为空'
+                }
+            }
+        },
+        bookDate: {
+            validators: {
+                notEmpty: {
+                    message: '预订日期不能为空'
                 }
             }
         }
@@ -60,7 +74,9 @@ RecordInfoDlg.close = function() {
  * 收集数据
  */
 RecordInfoDlg.collectData = function() {
-    this.set('id').set('groupId').set('cost').set('payMode').set('costMode');
+    this.set('id')
+        .set('bookPersonName').set('bookPersonPhone').set('bookDate').set('bookMode')
+        .set('state').set('cost').set('payMode');
 }
 
 /**
@@ -104,6 +120,9 @@ RecordInfoDlg.editSubmit = function() {
     this.clearData();
     this.collectData();
 
+    if (!this.validate()) {
+        return;
+    }
     //提交信息
     var ajax = new $ax(Feng.ctxPath + "/record/update", function(data){
         Feng.success("修改成功!");
@@ -118,4 +137,8 @@ RecordInfoDlg.editSubmit = function() {
 
 $(function() {
     Feng.initValidator("recordInfoForm", RecordInfoDlg.validateFields);
+
+    $("#bookMode").val($("#bookModeValue").val());
+    $("#state").val($("#stateValue").val());
+    $("#payMode").val($("#payModeValue").val());
 });

@@ -16,10 +16,10 @@ Record.initColumn = function () {
         {field: 'selectItem', radio: true},
         {title: 'id', field: 'id', visible: false, align: 'center', valign: 'middle'},
         {title: '俱乐部名称', field: 'groupName', align: 'center', valign: 'middle', sortable: true},
-        {title: '预定者名称', field: 'book_person_name', align: 'center', valign: 'middle', sortable: true},
-        {title: '预定者手机号码', field: 'book_person_phone', align: 'center', valign: 'middle', sortable: true},
-        {title: '预定日期', field: 'book_date', align: 'center', valign: 'middle', sortable: true},
-        {title: '预定方式', field: 'book_mode', align: 'center', valign: 'middle', sortable: true},
+        {title: '预订者名称', field: 'book_person_name', align: 'center', valign: 'middle', sortable: true},
+        {title: '预订者手机号码', field: 'book_person_phone', align: 'center', valign: 'middle', sortable: true},
+        {title: '预订日期', field: 'book_date', align: 'center', valign: 'middle', sortable: true},
+        {title: '预订方式', field: 'book_mode', align: 'center', valign: 'middle', sortable: true},
         {title: '状态', field: 'state', align: 'center', valign: 'middle', sortable: true},
         {title: '消费金额', field: 'cost', align: 'center', valign: 'middle', sortable: true},
         {title: '支付方式', field: 'pay_mode', align: 'center', valign: 'middle', sortable: true},
@@ -55,6 +55,22 @@ Record.openAddRecord = function () {
     });
     this.layerIndex = index;
 };
+/**
+ * 点击修改订场记录
+ */
+Record.openUpdateRecord = function () {
+    if (this.check()) {
+        var index = layer.open({
+            type: 2,
+            title: '修改订场记录',
+            area: ['800px', '420px'], //宽高
+            fix: false, //不固定
+            maxmin: true,
+            content: Feng.ctxPath + '/record/record_update/' + Record.seItem.id
+        });
+        this.layerIndex = index;
+    }
+};
 
 /**
  * 打开查看订场记录详情
@@ -67,7 +83,7 @@ Record.openRecordDetail = function () {
             area: ['800px', '420px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/record/record_update/' + Record.seItem.id
+            content: Feng.ctxPath + '/record/record_detail/' + Record.seItem.id
         });
         this.layerIndex = index;
     }
@@ -95,9 +111,11 @@ Record.delete = function () {
 Record.search = function () {
     var queryData = {};
     queryData['groupName'] = $("#groupName").val();
+    queryData['bookPersonName'] = $("#bookPersonName").val();
+    queryData['state'] = $("#state").val();
     queryData['startTime'] = $("#startTime").val();
     queryData['endTime'] = $("#endTime").val();
-    queryData['state'] = $("#state").val();
+    queryData['bookMode'] = $("#bookMode").val();
     Record.table.refresh({query: queryData});
 };
 

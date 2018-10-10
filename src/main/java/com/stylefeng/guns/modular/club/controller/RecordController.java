@@ -4,8 +4,19 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
+import com.stylefeng.guns.common.annotion.log.BussinessLog;
+import com.stylefeng.guns.common.constant.Const;
+import com.stylefeng.guns.common.constant.Dict;
+import com.stylefeng.guns.common.constant.factory.ConstantFactory;
+import com.stylefeng.guns.common.constant.tips.Tip;
 import com.stylefeng.guns.common.controller.BaseController;
+import com.stylefeng.guns.common.exception.BizExceptionEnum;
+import com.stylefeng.guns.common.exception.BussinessException;
 import com.stylefeng.guns.common.page.PageReq;
+import com.stylefeng.guns.core.log.LogObjectHolder;
+import com.stylefeng.guns.core.shiro.ShiroKit;
+import com.stylefeng.guns.core.shiro.ShiroUser;
+import com.stylefeng.guns.core.util.ToolUtil;
 import com.stylefeng.guns.modular.club.dao.CourtDao;
 import com.stylefeng.guns.modular.club.dao.PriceDao;
 import com.stylefeng.guns.modular.club.dao.RecordDao;
@@ -13,6 +24,8 @@ import com.stylefeng.guns.modular.club.model.BookCourtRecord;
 import com.stylefeng.guns.modular.club.model.Record;
 import com.stylefeng.guns.modular.club.service.IRecordService;
 import com.stylefeng.guns.modular.club.warpper.RecordWarpper;
+import com.stylefeng.guns.modular.system.factory.UserFactory;
+import com.stylefeng.guns.modular.system.transfer.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +34,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.naming.NoPermissionException;
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -28,6 +42,8 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.apache.shiro.web.filter.mgt.DefaultFilter.user;
 
 /**
  * 消费记录控制器
@@ -55,8 +71,8 @@ public class RecordController extends BaseController {
     public static final String MAPKEY_RETURN_CODE = "code";//返回结果的mapKey CODE_SUCCEED CODE_FAIL
     public static final String MAPKEY_RETURN_MSG = "msg";//返回结果的mapKey
     public static final Integer AVAILABLE_COURT = 1;//场地-可用
-    public static final Integer BOOKMODE_ONLINE = 0;//预定方式-网上
-    public static final Integer STATE_BOOKED = 0;//预定记录状态-已预定（默认状态）
+    public static final Integer BOOKMODE_ONLINE = 0;//预订方式-网上
+    public static final Integer STATE_BOOKED = 0;//预订记录状态-已预订（默认状态）
 
     /**
      * 跳转到消费记录首页
@@ -79,29 +95,57 @@ public class RecordController extends BaseController {
      */
     @RequestMapping("/record_update/{recordId}")
     public String recordUpdate(@PathVariable Integer recordId, Model model) {
+        if (ToolUtil.isEmpty(recordId)) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
+        BookCourtRecord record = recordDao.selectByPrimaryKey(recordId);
+        model.addAttribute("record",record);
+        LogObjectHolder.me().set(record);
         return PREFIX + "record_edit.html";
     }
 
+    /**
+     * 跳转到订场记录详情
+     */
+    @RequestMapping("/record_detail/{recordId}")
+    public String recordDetail(@PathVariable Integer recordId, Model model) {
+        if (ToolUtil.isEmpty(recordId)) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
+        model.addAttribute("recordId",recordId);
+        return PREFIX + "record_detail.html";
+    }
+
+    /**
+     * 订场记录详情列表
+     */
+    @RequestMapping("/detail/{recordId}")
+    @ResponseBody
+    public Object detail(@PathVariable Integer recordId) {
+        return null;
+    }
     /**
      * 获取消费记录列表
      */
     @RequestMapping(value = "/list")
     @ResponseBody
-    public Object list(String groupName,String startTime,String endTime,String state) {
+    public Object list(String groupName,String bookPersonName,String state,String startTime,String endTime,String bookMode) {
         PageReq params = defaultPage();
         PageHelper.offsetPage(params.getOffset(), params.getLimit());
         Map<String,Object> param=new HashMap<>();
         param.put("groupName",groupName);
+        param.put("bookPersonName",bookPersonName);
+        param.put("state",state);
         param.put("startTime",startTime);
         param.put("endTime",endTime);
-        param.put("state",state);
+        param.put("bookMode",bookMode);
         List<Map<String, Object>> records = recordDao.list(param);
         return super.warpObject(new RecordWarpper(records));
     }
 
     /**
-     * 预定信息详情
-     * @param bookDate - 预定日期 - 2018-09-21
+     * 预订信息详情
+     * @param bookDate - 预订日期 - 2018-09-21
      * @return
      */
     @RequestMapping(value = "/api/bookInfo",produces="text/html;charset=UTF-8")
@@ -112,7 +156,7 @@ public class RecordController extends BaseController {
         Map<String,Object> reMap = new HashMap();
         String code;
         try {
-            reMap.put("bookCourtInfo",recordDao.bookList(param));//已预定的场地信息
+            reMap.put("bookCourtInfo",recordDao.bookList(param));//已预订的场地信息
             reMap.put("timePriceInfo",priceDao.list());//所有时间的价格信息
             reMap.put("courtInfo",courtDao.list(new HashMap<String,Object>(){{put("available",AVAILABLE_COURT);}}));//所有可用的场地信息
             code = CODE_SUCCEED;
@@ -126,7 +170,7 @@ public class RecordController extends BaseController {
     }
 
     /**
-     * 预定场地
+     * 预订场地
      * @param bookInfo
      * @return
      */
@@ -146,7 +190,7 @@ public class RecordController extends BaseController {
                 JSONObject bookedJson = JSONObject.parseObject(booked.toString());
                 String courtId = bookedJson.getString("courtId");
                 String timePriceId = bookedJson.getString("timePriceId");
-                //查询是否已被预定
+                //查询是否已被预订
                 Map<String,Object> param=new HashMap<>();
                 param.put("bookDate",bookDate);
                 param.put("courtId",courtId);
@@ -179,7 +223,7 @@ public class RecordController extends BaseController {
     }
 
     /**
-     * 取消预定
+     * 取消预订
      *
      * @return
      */
@@ -209,22 +253,19 @@ public class RecordController extends BaseController {
         return SUCCESS_TIP;
     }
 
-
     /**
      * 修改消费记录
+     * @param record
+     * @param result
+     * @return
      */
-    @RequestMapping(value = "/update")
+    @RequestMapping("/update")
     @ResponseBody
-    public Object update() {
-        return super.SUCCESS_TIP;
-    }
-
-    /**
-     * 消费记录详情
-     */
-    @RequestMapping(value = "/detail")
-    @ResponseBody
-    public Object detail() {
-        return null;
+    public Tip edit(@Valid BookCourtRecord record, BindingResult result) {
+        if (result.hasErrors()) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
+        recordDao.updateByPrimaryKeySelective(record);
+        return SUCCESS_TIP;
     }
 }

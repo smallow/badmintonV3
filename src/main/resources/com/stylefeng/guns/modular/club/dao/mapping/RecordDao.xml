@@ -2,6 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.stylefeng.guns.modular.club.dao.RecordDao">
 
+    <resultMap id="RecordResultMap" type="com.stylefeng.guns.modular.club.model.BookCourtRecord">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="group_id" property="groupId" jdbcType="INTEGER"/>
+        <result column="book_person_name" property="bookPersonName" jdbcType="VARCHAR"/>
+        <result column="book_person_phone" property="bookPersonPhone" jdbcType="VARCHAR"/>
+        <result column="book_date" property="bookDate" jdbcType="DATE"/>
+        <result column="book_mode" property="bookMode" jdbcType="INTEGER"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+        <result column="cost" property="cost" jdbcType="DECIMAL"/>
+        <result column="pay_mode" property="payMode" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
     <select id="list" resultType="map" parameterType="java.util.Map">
         SELECT
         r.*,
@@ -12,14 +25,20 @@
             <if test="groupName!=null and groupName!=''">
                 AND g.name like CONCAT('%',#{groupName},'%')
             </if>
-            <if test="startTime!=null and startTime!=''">
-                AND r.create_time&gt;=CONCAT(#{startTime},' 00:00:00')
-            </if>
-            <if test="endTime!=null and endTime!=''">
-                AND r.create_time&lt;=CONCAT(#{endTime},' 23:59:59')
+            <if test="bookPersonName!=null and bookPersonName!=''">
+                AND r.book_person_name like CONCAT('%',#{bookPersonName},'%')
             </if>
             <if test="state!=null and state>-1">
                 AND r.state=#{state}
+            </if>
+            <if test="startTime!=null and startTime!=''">
+                AND r.book_date&gt;=CONCAT(#{startTime},' 00:00:00')
+            </if>
+            <if test="endTime!=null and endTime!=''">
+                AND r.book_date&lt;=CONCAT(#{endTime},' 23:59:59')
+            </if>
+            <if test="bookMode!=null and bookMode>-1">
+                AND r.book_mode=#{bookMode}
             </if>
         </where>
         ORDER BY r.create_time DESC

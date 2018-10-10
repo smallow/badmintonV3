@@ -19,8 +19,14 @@ public class RecordWarpper extends BaseControllerWarpper {
 
     @Override
     protected void warpTheMap(Map<String, Object> map) {
-        map.put("book_mode", EnumUtil.getByCode(Integer.parseInt(String.valueOf(map.get("book_mode"))), BookModeEnum.class).getName());
-        map.put("state", EnumUtil.getByCode(Integer.parseInt(String.valueOf(map.get("state"))), BookRecordStateEnum.class).getName());
-        map.put("pay_mode", EnumUtil.getByCode(Integer.parseInt(String.valueOf(map.get("pay_mode"))), RecordPayModeEnum.class).getName());
+        if(map.get("book_mode")!=null){
+            map.put("book_mode", EnumUtil.getByCode(Integer.parseInt(String.valueOf(map.get("book_mode"))), BookModeEnum.class).getName());
+        }
+        if(map.get("state")!=null){
+            map.put("state", EnumUtil.getByCode(Integer.parseInt(String.valueOf(map.get("state"))), BookRecordStateEnum.class).getName());
+        }
+        if(map.get("pay_mode")!=null){
+            map.put("pay_mode", EnumUtil.getByCode(Integer.parseInt(String.valueOf(map.get("pay_mode"))), RecordPayModeEnum.class).getName());
+        }
     }
 }

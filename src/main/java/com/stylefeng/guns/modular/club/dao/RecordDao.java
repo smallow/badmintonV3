@@ -13,7 +13,7 @@ import java.util.Map;
  * @author fengshuonan
  * @Date 2018-09-18 09:40:50
  */
-public interface RecordDao extends Mapper<Record> {
+public interface RecordDao extends Mapper<BookCourtRecord> {
 
     List<Map<String, Object>> list(Map<String,Object> param);
 
