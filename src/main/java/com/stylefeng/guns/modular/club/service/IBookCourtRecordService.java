@@ -10,7 +10,7 @@ import java.util.Map;
  * @author fengshuonan
  * @Date 2018-09-18 09:40:58
  */
-public interface IRecordService {
+public interface IBookCourtRecordService {
 
     void saveBookInfo(BookCourtRecord bookCourtRecord, Map<String,Object> bookedMap);
 

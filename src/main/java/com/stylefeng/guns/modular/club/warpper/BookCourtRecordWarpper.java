@@ -12,8 +12,8 @@ import java.util.Map;
 /**
  * Created by lxl on 2018-9-20.
  */
-public class RecordWarpper extends BaseControllerWarpper {
-    public RecordWarpper(List<Map<String, Object>> list) {
+public class BookCourtRecordWarpper extends BaseControllerWarpper {
+    public BookCourtRecordWarpper(List<Map<String, Object>> list) {
         super(list);
     }
 
