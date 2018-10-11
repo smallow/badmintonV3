@@ -1,5 +1,6 @@
 package com.stylefeng.guns.modular.club.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -30,7 +31,7 @@ public class BookCourtRecord {
     private String bookPersonPhone;//预订者手机号码
 
     @Column(name = "book_date")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date bookDate;//预订日期
 
     @Column(name = "book_mode")

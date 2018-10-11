@@ -136,6 +136,8 @@ public class RecordController extends BaseController {
         param.put("endTime", endTime);
         param.put("bookMode", bookMode);
         List<Map<String, Object>> records = bookCourtRecordDao.list(param);
+        //String json=JSON.toJSONString(records);
+        //System.out.println(json);
         return super.warpObject(new BookCourtRecordWarpper(records));
     }
 
