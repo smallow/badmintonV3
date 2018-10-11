@@ -34,5 +34,10 @@ public class BookCourtRecordWarpper extends BaseControllerWarpper {
         if (map.get("book_date") != null) {
             map.put("book_date",format1.format(map.get("book_date")));
         }
+        if (map.get("group_id")!=null){
+            if(Integer.parseInt(String.valueOf(map.get("group_id")))==0){
+                map.put("groupName","游客包场");
+            }
+        }
     }
 }

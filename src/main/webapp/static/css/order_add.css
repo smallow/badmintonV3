@@ -1,12 +1,12 @@
 body{
-    max-width: 800px;
-    max-height: 378px;
+    max-width: 1440px;
+    max-height: 900px;
     margin: 0;
     padding: 0;
 }
 .orderPage,.detailPage{
-    width: 800px;
-    height: 378px;
+    width: 1440px;
+    height: 900px;
     background: #efe5e5;
 }
 ul{
@@ -23,15 +23,15 @@ ul li{
 #order .line{
     display: inline-flex;
     flex-direction: row;
-    height: 40px;
+    height: 60px;
 }
 .cont_bot{
     display: inline-flex;
     flex-direction: row;
 }
 .order_view{
-    width: 720px;
-    height: 270px;
+    width: 1220px;
+    height: 768px;
     overflow: hidden;
 }
 .touch{
@@ -42,9 +42,9 @@ ul li{
 }
 #order ul li{
     display: block;
-    width: 70px;
-    height: 40px;
-    line-height: 40px;
+    width: 100px;
+    height: 60px;
+    line-height: 60px;
     text-align: center;
     border-bottom: 1px #fff solid;
     border-right: 1px #fff solid;
@@ -52,17 +52,18 @@ ul li{
     cursor: pointer;
 }
 #order .unsell{
-    background: #ccc;
+    background: #00ff00;
 }
 #order .solded{
-    background: #9e9e9e;
+    background: #ff0000;
+    color: #fff;
 }
 #order .order{
     background: #3da8f6;
 }
 .num_view{
     width: 80px;
-    height: 270px;
+    height: 768px;
     overflow: hidden;
 }
 #num{
@@ -70,8 +71,8 @@ ul li{
 }
 #num ul li{
     width: 80px;
-    height: 40px;
-    line-height: 40px;
+    height: 60px;
+    line-height: 60px;
     text-align: center;
 }
 #num ul {
@@ -79,8 +80,8 @@ ul li{
     flex-direction: column;
 }
 .time_view{
-    width: 720px;
-    height: 28px;
+    width: 1220px;
+    height: 40px;
     overflow: hidden;
     margin-left: 80px;
 }
@@ -92,7 +93,7 @@ ul li{
     flex-direction: row;
 }
 #time ul li{
-    min-width: 70px;
+    min-width: 100px;
     height: 30px;
     text-align: center;
     font-size: 7px;
@@ -103,10 +104,10 @@ ul li{
     flex-direction: row;
 }
 .showData li{
-    width: 114px;
+    width: 120px;
     text-align: center;
-    height: 30px;
-    line-height: 30px;
+    height: 40px;
+    line-height: 40px;
     cursor: pointer;
 }
 .showData .select{

@@ -44,14 +44,26 @@ Record.check = function () {
 /**
  * 点击添加订场记录
  */
-Record.openAddRecord = function () {
+Record.openAddRecord = function (bookCourtType) {
+    var title="";
+    switch (parseInt(bookCourtType)) {
+        case 0:
+            title="俱乐部订场";
+            break;
+        case 1:
+            title="游客订场";
+            break;
+        case 2:
+            title="次卡订场";
+            break;
+    }
     var index = layer.open({
         type: 2,
-        title: '添加订场记录',
-        area: ['800px', '420px'], //宽高
+        title: title,
+        area: ['1440px', '800px'], //宽高
         fix: false, //不固定
         maxmin: true,
-        content: Feng.ctxPath + '/record/record_add'
+        content: Feng.ctxPath + '/record/record_add?bookCourtType='+bookCourtType
     });
     this.layerIndex = index;
 };

@@ -12,9 +12,12 @@ import com.stylefeng.guns.common.page.PageReq;
 import com.stylefeng.guns.core.log.LogObjectHolder;
 import com.stylefeng.guns.core.util.ToolUtil;
 import com.stylefeng.guns.modular.club.dao.CourtDao;
+import com.stylefeng.guns.modular.club.dao.GroupDao;
 import com.stylefeng.guns.modular.club.dao.PriceDao;
 import com.stylefeng.guns.modular.club.dao.BookCourtRecordDao;
+import com.stylefeng.guns.modular.club.enums.BookModeEnum;
 import com.stylefeng.guns.modular.club.model.BookCourtRecord;
+import com.stylefeng.guns.modular.club.model.Group;
 import com.stylefeng.guns.modular.club.service.IBookCourtRecordService;
 import com.stylefeng.guns.modular.club.warpper.BookCourtRecordWarpper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 消费记录控制器
@@ -52,6 +56,8 @@ public class RecordController extends BaseController {
     private CourtDao courtDao;
     @Autowired
     private IBookCourtRecordService recordService;
+    @Autowired
+    private GroupDao groupDao;
 
     public static final String CODE_SUCCEED = "1"; //代码 1-成功
     public static final String CODE_FAIL = "2"; //代码 2-失败
@@ -81,8 +87,23 @@ public class RecordController extends BaseController {
      * 新增订单页面--iframe
      */
     @RequestMapping("/record_add")
-    public String orderadd() {
+    public String orderadd(String bookCourtType, Model model) {
+        model.addAttribute("bookCourtType", bookCourtType);
         return PREFIX + "order_add.html";
+    }
+
+    @RequestMapping("/groupList")
+    @ResponseBody
+    public Object getGroupList() {
+        List<Group> groupList = groupDao.selectAll();
+        List<Map<String, Object>> list = groupList.stream().map(e -> {
+            Map<String, Object> map = new HashMap<>();
+            map.put("groupId", e.getId());
+            map.put("groupName", e.getName());
+            return map;
+        }).collect(Collectors.toList());
+        //String groupListJson = JSON.toJSONString(list);
+        return list;
     }
 
     /**
@@ -187,6 +208,10 @@ public class RecordController extends BaseController {
             String bookDate = jsonObj.getString("bookDate");
             String cost = jsonObj.getString("cost");
             JSONArray arr = jsonObj.getJSONArray("bookList");
+            String bookPersonName = jsonObj.getString("bookPersonName");
+            String bookPersonPhone = jsonObj.getString("bookPersonPhone");
+            String bookCourtType = jsonObj.getString("bookCourtType");
+            Integer groupId = jsonObj.getInteger("groupId");
             Map<String, Object> bookedMap = new HashMap();
             for (Object booked : arr) {
                 JSONObject bookedJson = JSONObject.parseObject(booked.toString());
@@ -206,11 +231,28 @@ public class RecordController extends BaseController {
                 bookedMap.put(courtId, bookedMap.get(courtId) == null ? timePriceId : bookedMap.get(courtId) + "," + timePriceId);
             }
             BookCourtRecord bcr = new BookCourtRecord();
-            bcr.setGroupId(11);
-            bcr.setBookPersonName("测试24");
-            bcr.setBookPersonPhone("15812341124");
+            if (bookCourtType != null) {
+
+                switch (Integer.parseInt(bookCourtType)) {
+                    case 1:
+                        bcr.setGroupId(0);
+                        bcr.setBookMode(BookModeEnum.SPOT.getCode());
+                        break;
+                    case 0:
+                        bcr.setGroupId(groupId);
+                        bcr.setBookMode(BookModeEnum.ONLINE.getCode());
+                        break;
+                    case 2:
+                        bcr.setGroupId(0);
+                        bcr.setBookMode(BookModeEnum.PER.getCode());
+                        break;
+                }
+
+            }
+            bcr.setBookPersonName(bookPersonName);
+            bcr.setBookPersonPhone(bookPersonPhone);
             bcr.setBookDate((new SimpleDateFormat("yyyy-MM-dd")).parse(bookDate));
-            bcr.setBookMode(BOOKMODE_ONLINE);
+
             bcr.setCost(new BigDecimal(cost));
             bcr.setState(STATE_BOOKED);
             recordService.saveBookInfo(bcr, bookedMap);

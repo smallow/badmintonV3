@@ -42,8 +42,14 @@
                             </div>
                         </div>
                         <div class="hidden-xs" id="RecordTableToolbar" role="group">
-                            @if(shiro.hasPermission("/record/add")){
-                                <#button name="添加" icon="fa-plus" clickFun="Record.openAddRecord()"/>
+                            @if(shiro.hasPermission("/record/clubAdd")){
+                            <#button name="俱乐部订场" icon="fa-plus" clickFun="Record.openAddRecord('0')"/>
+                            @}
+                            @if(shiro.hasPermission("/record/touristAdd")){
+                                <#button name="游客订场" icon="fa-plus" clickFun="Record.openAddRecord('1')"/>
+                            @}
+                            @if(shiro.hasPermission("/record/tempCardAdd")){
+                            <#button name="次卡订场" icon="fa-plus" clickFun="Record.openAddRecord('2')"/>
                             @}
                             @if(shiro.hasPermission("/record/update")){
                                 <#button name="修改" icon="fa-plus" clickFun="Record.openUpdateRecord()" space="true"/>

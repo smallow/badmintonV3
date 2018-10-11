@@ -7,7 +7,7 @@
         <result column="group_id" property="groupId" jdbcType="INTEGER"/>
         <result column="book_person_name" property="bookPersonName" jdbcType="VARCHAR"/>
         <result column="book_person_phone" property="bookPersonPhone" jdbcType="VARCHAR"/>
-        <result column="book_date" property="bookDate" jdbcType="TIMESTAMP"/>
+        <result column="book_date" property="bookDate" jdbcType="DATE"/>
         <result column="book_mode" property="bookMode" jdbcType="INTEGER"/>
         <result column="state" property="state" jdbcType="INTEGER"/>
         <result column="cost" property="cost" jdbcType="DECIMAL"/>
