@@ -49,4 +49,6 @@ public class BookCourtRecord {
 
     @Column(name = "create_time")
     private Timestamp createTime;//创建时间
+
+
 }
